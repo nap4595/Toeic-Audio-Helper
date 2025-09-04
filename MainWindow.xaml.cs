@@ -305,7 +305,32 @@ namespace ToeicAudioHelper
             catch { }
 
             var next = Math.Max(minQ, Math.Min(maxQ, current + delta));
-            TxtQuestion.Text = next.ToString();
+            TxtQuestion.Text = PadQuestion(next);
+        }
+
+        private void TxtQuestion_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(TxtQuestion.Text, out var q))
+            {
+                TxtQuestion.Text = PadQuestion(q);
+            }
+        }
+
+        private void TxtQuestion_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (int.TryParse(TxtQuestion.Text, out var q))
+                {
+                    TxtQuestion.Text = PadQuestion(q);
+                }
+                e.Handled = true;
+            }
+        }
+
+        private static string PadQuestion(int q)
+        {
+            return q.ToString("000");
         }
 
         private void TglRepeat_Checked(object sender, RoutedEventArgs e)

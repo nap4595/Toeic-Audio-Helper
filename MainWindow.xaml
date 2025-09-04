@@ -76,10 +76,10 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="28"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="TxtQuestion" Grid.Column="0" PreviewTextInput="TxtQuestion_PreviewTextInput" MaxLength="3" VerticalContentAlignment="Center" TextAlignment="Center"/>
+                        <TextBox x:Name="TxtQuestion" Grid.Column="0" PreviewTextInput="TxtQuestion_PreviewTextInput" MaxLength="3" VerticalContentAlignment="Center" TextAlignment="Center" LostFocus="TxtQuestion_LostFocus" KeyDown="TxtQuestion_KeyDown"/>
                         <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right">
-                            <Button x:Name="BtnQUp" Click="BtnQUp_Click" Width="24" Height="16" Padding="0" Margin="4,0,0,0">▲</Button>
-                            <Button x:Name="BtnQDown" Click="BtnQDown_Click" Width="24" Height="16" Padding="0" Margin="4,4,0,0">▼</Button>
+                            <RepeatButton x:Name="BtnQUp" Click="BtnQUp_Click" Width="24" Height="16" Padding="0" Margin="4,0,0,0" Delay="300" Interval="80">▲</RepeatButton>
+                            <RepeatButton x:Name="BtnQDown" Click="BtnQDown_Click" Width="24" Height="16" Padding="0" Margin="4,4,0,0" Delay="300" Interval="80">▼</RepeatButton>
                         </StackPanel>
                     </Grid>
                     <Button Grid.Column="5" x:Name="BtnPlayPart" Click="BtnPlayPart_Click" Margin="8,0,0,0">Play Part</Button>

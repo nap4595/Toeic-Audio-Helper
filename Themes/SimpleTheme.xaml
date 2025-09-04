@@ -18,6 +18,36 @@
     <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
   </Style>
 
+  <!-- RepeatButton styled like Button -->
+  <Style TargetType="RepeatButton">
+    <Setter Property="Padding" Value="10,6"/>
+    <Setter Property="Margin" Value="0,0,8,0"/>
+    <Setter Property="Background" Value="#FFFFFF"/>
+    <Setter Property="BorderBrush" Value="#DDE3EA"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="RepeatButton">
+          <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="bd" Property="BorderBrush" Value="#C8D1DC"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+              <Setter TargetName="bd" Property="Background" Value="#F4F6F8"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Opacity" Value="0.6"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
   <!-- Square-corner buttons -->
   <Style TargetType="Button">
     <Setter Property="Padding" Value="10,6"/>
