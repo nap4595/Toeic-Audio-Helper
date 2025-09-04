@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ToeicAudioHelper"
         mc:Ignorable="d"
         Title="TOEIC Audio Helper"
-        Height="520" Width="900"
+        Height="280" Width="520"
         WindowStyle="None" Background="Transparent" AllowsTransparency="True">
     <Border Style="{StaticResource Shell}" Margin="8">
         <Grid>
@@ -17,7 +17,7 @@
 
             <!-- Simple Top Bar -->
             <Border Grid.Row="0" Style="{StaticResource TopBar}" MouseLeftButtonDown="TopBar_MouseLeftButtonDown">
-                <DockPanel LastChildFill="True">
+                <DockPanel LastChildFill="False">
                     <TextBlock Text="TOEIC Audio Helper" VerticalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                         <Button x:Name="BtnMin" Click="BtnMin_Click" Width="22" Height="22" Margin="4,0">_</Button>
@@ -47,17 +47,17 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    <!-- Left: Test, Play All, Question, Play Part -->
                     <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="0,0,6,0" Text="Test"/>
-                    <ComboBox Grid.Column="1" x:Name="CmbTest" SelectedIndex="0" VerticalAlignment="Center">
+                    <ComboBox Grid.Column="1" x:Name="CmbTest" SelectedIndex="0" VerticalAlignment="Center" Width="80">
                         <ComboBoxItem Content="01"/>
                         <ComboBoxItem Content="02"/>
                         <ComboBoxItem Content="03"/>
@@ -69,14 +69,13 @@
                         <ComboBoxItem Content="09"/>
                         <ComboBoxItem Content="10"/>
                     </ComboBox>
-                    <TextBlock Grid.Column="3" VerticalAlignment="Center" Margin="0,0,6,0" Text="Question"/>
+                    <Button Grid.Column="2" x:Name="BtnPlayAll" Click="BtnPlayAll_Click" Margin="8,0,0,0">Play All</Button>
+                    <TextBlock Grid.Column="3" VerticalAlignment="Center" Margin="8,0,6,0" Text="Question"/>
                     <TextBox Grid.Column="4" x:Name="TxtQuestion" PreviewTextInput="TxtQuestion_PreviewTextInput" MaxLength="3" VerticalContentAlignment="Center"/>
-                    <StackPanel Grid.Column="6" Grid.ColumnSpan="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button x:Name="BtnPlayAll" Click="BtnPlayAll_Click">Play All</Button>
-                        <Button x:Name="BtnPlayPart" Click="BtnPlayPart_Click">Play Part</Button>
-                        <Button x:Name="BtnPlayVocaLc" Click="BtnPlayVocaLc_Click">VOCA LC</Button>
-                        <Button x:Name="BtnPlayVocaRc" Click="BtnPlayVocaRc_Click">VOCA RC</Button>
-                    </StackPanel>
+                    <Button Grid.Column="5" x:Name="BtnPlayPart" Click="BtnPlayPart_Click" Margin="8,0,0,0">Play Part</Button>
+                    <!-- Spacer -->
+                    <TextBlock Grid.Column="6"/>
+                    <!-- Right: VOCA moved to below -->
                 </Grid>
 
                 <!-- Player -->
@@ -92,10 +91,14 @@
                         <Slider x:Name="SldPosition" Grid.Column="1" Minimum="0" ValueChanged="SldPosition_ValueChanged" PreviewMouseDown="SldPosition_PreviewMouseDown" PreviewMouseUp="SldPosition_PreviewMouseUp"/>
                         <TextBlock x:Name="LblTotal" Grid.Column="2" VerticalAlignment="Center" Margin="6,0,0,0">00:00</TextBlock>
                     </Grid>
-                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                        <Button x:Name="BtnPlay" Click="BtnPlay_Click">Play</Button>
-                        <Button x:Name="BtnPause" Click="BtnPause_Click">Pause</Button>
-                        <Button x:Name="BtnStop" Click="BtnStop_Click">Stop</Button>
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0" HorizontalAlignment="Center">
+                        <Button x:Name="BtnPlay" Click="BtnPlay_Click">▶</Button>
+                        <Button x:Name="BtnPause" Click="BtnPause_Click">⏸</Button>
+                        <Button x:Name="BtnStop" Click="BtnStop_Click">⏹</Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0" HorizontalAlignment="Right">
+                        <Button x:Name="BtnPlayVocaLc" Click="BtnPlayVocaLc_Click">VOCA LC</Button>
+                        <Button x:Name="BtnPlayVocaRc" Click="BtnPlayVocaRc_Click">VOCA RC</Button>
                     </StackPanel>
                     <TextBlock x:Name="TxtStatus" Margin="0,6,0,0" Foreground="{StaticResource Brush.Muted}"/>
                     <TextBlock x:Name="TxtNowPlaying" Margin="0,2,0,0" TextWrapping="Wrap"/>
@@ -104,4 +107,3 @@
         </Grid>
     </Border>
 </Window>
-
