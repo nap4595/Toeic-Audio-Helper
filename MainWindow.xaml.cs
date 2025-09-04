@@ -37,6 +37,21 @@ namespace ToeicAudioHelper
             UpdateStatus("폴더를 먼저 선택하세요.");
         }
 
+        // Simple custom chrome
+        private void TopBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                try { DragMove(); } catch { }
+            }
+        }
+        private void BtnMin_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+        private void BtnMax_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+        private void BtnClose_Click(object sender, RoutedEventArgs e) => Close();
+
         private void BtnSelectFolder_Click(object sender, RoutedEventArgs e)
         {
             using var dlg = new System.Windows.Forms.FolderBrowserDialog();
