@@ -143,6 +143,10 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="22"/>
               </Grid.ColumnDefinitions>
+              <!-- Invisible toggle overlay to open/close dropdown -->
+              <ToggleButton x:Name="DropDownToggle" Grid.ColumnSpan="2" Focusable="False" ClickMode="Press"
+                            Background="#00000000" BorderBrush="{x:Null}" BorderThickness="0"
+                            IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
               <ContentPresenter Margin="6,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
                                 Content="{TemplateBinding SelectionBoxItem}"
                                 ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
