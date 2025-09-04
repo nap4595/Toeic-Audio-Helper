@@ -96,10 +96,13 @@
                         <Button x:Name="BtnPause" Click="BtnPause_Click">⏸</Button>
                         <Button x:Name="BtnStop" Click="BtnStop_Click">⏹</Button>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0" HorizontalAlignment="Right">
-                        <Button x:Name="BtnPlayVocaLc" Click="BtnPlayVocaLc_Click">VOCA LC</Button>
-                        <Button x:Name="BtnPlayVocaRc" Click="BtnPlayVocaRc_Click">VOCA RC</Button>
-                    </StackPanel>
+                    <DockPanel Margin="0,6,0,0">
+                        <ToggleButton x:Name="TglRepeat" DockPanel.Dock="Left" ToolTip="Repeat" Checked="TglRepeat_Checked" Unchecked="TglRepeat_Unchecked">🔁</ToggleButton>
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <Button x:Name="BtnPlayVocaLc" Click="BtnPlayVocaLc_Click">VOCA LC</Button>
+                            <Button x:Name="BtnPlayVocaRc" Click="BtnPlayVocaRc_Click">VOCA RC</Button>
+                        </StackPanel>
+                    </DockPanel>
                     <TextBlock x:Name="TxtStatus" Margin="0,6,0,0" Foreground="{StaticResource Brush.Muted}"/>
                     <TextBlock x:Name="TxtNowPlaying" Margin="0,2,0,0" TextWrapping="Wrap"/>
                 </StackPanel>

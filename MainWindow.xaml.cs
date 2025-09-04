@@ -28,6 +28,7 @@ namespace ToeicAudioHelper
         private string? _root;
         private AudioCatalog _catalog = new AudioCatalog();
         private string? _currentFile;
+        private bool _repeatEnabled = false;
 
         public MainWindow()
         {
@@ -186,7 +187,10 @@ namespace ToeicAudioHelper
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.Source != null) Player.Stop();
+            if (Player.Source != null)
+            {
+                try { Player.Stop(); Player.Position = TimeSpan.Zero; } catch { }
+            }
             _timer.Stop();
             SldPosition.Value = 0;
             LblNow.Text = "00:00";
@@ -204,7 +208,19 @@ namespace ToeicAudioHelper
 
         private void Player_MediaEnded(object sender, RoutedEventArgs e)
         {
+            if (_repeatEnabled && Player.Source != null)
+            {
+                try
+                {
+                    Player.Position = TimeSpan.Zero;
+                    Player.Play();
+                    if (!_timer.IsEnabled) _timer.Start();
+                }
+                catch { }
+                return;
+            }
             _timer.Stop();
+            try { Player.Stop(); Player.Position = TimeSpan.Zero; } catch { }
             SldPosition.Value = 0;
             LblNow.Text = "00:00";
         }
@@ -260,6 +276,16 @@ namespace ToeicAudioHelper
         private void TxtQuestion_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !e.Text.All(char.IsDigit);
+        }
+
+        private void TglRepeat_Checked(object sender, RoutedEventArgs e)
+        {
+            _repeatEnabled = true;
+        }
+
+        private void TglRepeat_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _repeatEnabled = false;
         }
 
         private static string FormatTime(TimeSpan ts)
