@@ -167,7 +167,7 @@ namespace ToeicAudioHelper
                 Player.Stop();
                 Player.Source = new Uri(path);
                 Player.Play();
-                _timer.Start();
+                StartPositionTimer();
             }
             catch (Exception ex)
             {
@@ -177,12 +177,18 @@ namespace ToeicAudioHelper
 
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.Source != null) Player.Play();
+            if (Player.Source != null)
+            {
+                _isSliding = false;
+                Player.Play();
+                StartPositionTimer();
+            }
         }
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
             if (Player.Source != null) Player.Pause();
+            StopPositionTimer();
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
@@ -191,7 +197,7 @@ namespace ToeicAudioHelper
             {
                 try { Player.Stop(); Player.Position = TimeSpan.Zero; } catch { }
             }
-            _timer.Stop();
+            StopPositionTimer();
             SldPosition.Value = 0;
             LblNow.Text = "00:00";
         }
@@ -214,12 +220,12 @@ namespace ToeicAudioHelper
                 {
                     Player.Position = TimeSpan.Zero;
                     Player.Play();
-                    if (!_timer.IsEnabled) _timer.Start();
+                    StartPositionTimer();
                 }
                 catch { }
                 return;
             }
-            _timer.Stop();
+            StopPositionTimer();
             try { Player.Stop(); Player.Position = TimeSpan.Zero; } catch { }
             SldPosition.Value = 0;
             LblNow.Text = "00:00";
@@ -293,6 +299,16 @@ namespace ToeicAudioHelper
             if (ts.TotalHours >= 1)
                 return $"{(int)ts.TotalHours:00}:{ts.Minutes:00}:{ts.Seconds:00}";
             return $"{ts.Minutes:00}:{ts.Seconds:00}";
+        }
+
+        // Centralized timer control
+        private void StartPositionTimer()
+        {
+            if (!_timer.IsEnabled) _timer.Start();
+        }
+        private void StopPositionTimer()
+        {
+            if (_timer.IsEnabled) _timer.Stop();
         }
 
         private void UpdateStatus(string text)
