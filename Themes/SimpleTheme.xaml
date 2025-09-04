@@ -192,7 +192,8 @@
             </Grid.RowDefinitions>
             <Track x:Name="PART_Track" Height="4">
               <Track.DecreaseRepeatButton>
-                <RepeatButton Command="Slider.DecreaseLarge" Background="{StaticResource Brush.Primary}" BorderBrush="{StaticResource Brush.Primary}" Height="4"/>
+                <!-- Remove progress fill: use same dark color as rest of track -->
+                <RepeatButton Command="Slider.DecreaseLarge" Background="#2A2A2A" BorderBrush="#2A2A2A" Height="4"/>
               </Track.DecreaseRepeatButton>
               <Track.Thumb>
                 <Thumb Height="12" Width="12">
