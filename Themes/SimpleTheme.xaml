@@ -133,6 +133,44 @@
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="Padding" Value="6,2"/>
     <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ComboBox">
+          <Grid>
+            <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"/>
+            <Grid Margin="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="22"/>
+              </Grid.ColumnDefinitions>
+              <ContentPresenter Margin="6,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Content="{TemplateBinding SelectionBoxItem}"
+                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
+              <Border Grid.Column="1" Background="#1A1A1A" BorderBrush="#2A2A2A" BorderThickness="0,0,0,0">
+                <TextBlock Text="▾" Foreground="{StaticResource Brush.Text}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+              </Border>
+            </Grid>
+            <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+              <Grid MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                <Border Background="#111111" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"/>
+                <ScrollViewer Margin="0" SnapsToDevicePixels="True">
+                  <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                </ScrollViewer>
+              </Grid>
+            </Popup>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Bd" Property="BorderBrush" Value="#3A3A3A"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Opacity" Value="0.6"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
     <Style.Resources>
       <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#111111"/>
       <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#111111"/>
