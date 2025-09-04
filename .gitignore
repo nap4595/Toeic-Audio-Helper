@@ -1,0 +1,19 @@
+﻿# Build outputs
+bin/
+obj/
+
+# VS/JetBrains
+.vs/
+*.user
+*.suo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary
+*.tmp
+*.log
+
+/예시폴더/
+
