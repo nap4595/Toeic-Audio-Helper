@@ -284,6 +284,30 @@ namespace ToeicAudioHelper
             e.Handled = !e.Text.All(char.IsDigit);
         }
 
+        private void BtnQUp_Click(object sender, RoutedEventArgs e) => AdjustQuestion(+1);
+        private void BtnQDown_Click(object sender, RoutedEventArgs e) => AdjustQuestion(-1);
+
+        private void AdjustQuestion(int delta)
+        {
+            int current = 0;
+            if (!int.TryParse(TxtQuestion.Text, out current)) current = 0;
+
+            int minQ = 1, maxQ = 999;
+            try
+            {
+                var t = SelectedTest();
+                if (_catalog.QuestionsByTest.TryGetValue(t, out var list) && list.Count > 0)
+                {
+                    minQ = list.Min(s => s.Start);
+                    maxQ = list.Max(s => s.End);
+                }
+            }
+            catch { }
+
+            var next = Math.Max(minQ, Math.Min(maxQ, current + delta));
+            TxtQuestion.Text = next.ToString();
+        }
+
         private void TglRepeat_Checked(object sender, RoutedEventArgs e)
         {
             _repeatEnabled = true;
