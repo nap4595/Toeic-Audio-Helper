@@ -126,29 +126,44 @@
   </Style>
   
   <!-- ToggleButton styled like Button -->
-  <Style TargetType="ToggleButton">
-    <Setter Property="Padding" Value="10,6"/>
-    <Setter Property="Margin" Value="0,0,8,0"/>
-    <Setter Property="Background" Value="#FFFFFF"/>
-    <Setter Property="BorderBrush" Value="#DDE3EA"/>
+  
+  <Style TargetType="ComboBox">
+    <Setter Property="Background" Value="#111111"/>
+    <Setter Property="BorderBrush" Value="#2A2A2A"/>
     <Setter Property="BorderThickness" Value="1"/>
-    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Padding" Value="6,2"/>
+    <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
+    <Style.Resources>
+      <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#111111"/>
+      <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#111111"/>
+      <SolidColorBrush x:Key="{x:Static SystemColors.ControlLightBrushKey}" Color="#111111"/>
+      <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#E5E5E5"/>
+      <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#E5E5E5"/>
+      <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#232323"/>
+      <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#E5E5E5"/>
+    </Style.Resources>
+  </Style>
+
+  <!-- ComboBoxItem: dark dropdown rows -->
+  <Style TargetType="ComboBoxItem">
+    <Setter Property="Background" Value="#111111"/>
+    <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
+    <Setter Property="Padding" Value="6,4"/>
+    <Setter Property="BorderBrush" Value="#2A2A2A"/>
+    <Setter Property="BorderThickness" Value="0,1,0,0"/>
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="ToggleButton">
-          <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0">
-            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <ControlTemplate TargetType="ComboBoxItem">
+          <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+            <ContentPresenter Margin="4,0,4,0" VerticalAlignment="Center"/>
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-              <Setter TargetName="bd" Property="BorderBrush" Value="#C8D1DC"/>
+              <Setter TargetName="bd" Property="Background" Value="#1A1A1A"/>
             </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="#F4F6F8"/>
-            </Trigger>
-            <Trigger Property="IsChecked" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="#EAF1FF"/>
-              <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource Brush.Primary}"/>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter TargetName="bd" Property="Background" Value="#232323"/>
+              <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
               <Setter Property="Opacity" Value="0.6"/>
@@ -157,13 +172,6 @@
         </ControlTemplate>
       </Setter.Value>
     </Setter>
-  </Style>
-  <Style TargetType="ComboBox">
-    <Setter Property="Background" Value="#111111"/>
-    <Setter Property="BorderBrush" Value="#2A2A2A"/>
-    <Setter Property="BorderThickness" Value="1"/>
-    <Setter Property="Padding" Value="6,2"/>
-    <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
   </Style>
 
   <!-- Shell container and top bar -->
