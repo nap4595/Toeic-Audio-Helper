@@ -13,6 +13,8 @@ namespace ToeicAudioHelper
         private static readonly Regex QuestionRegex = new(@"Test[_\s-]?(\d{2})-(\d{1,3})(?:-(\d{1,3}))?\.mp3", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private static readonly Regex TestTokenRegex = new(@"Test[_\s-]?(0?[1-9]|10)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
         private static readonly Regex BareTwoDigitTestRegex = new(@"\b(0?[1-9]|10)\b", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        private static readonly Regex VocaRcFileRegex = new(@"^Test[_\s-]?(0?[1-9]|10)[_\s-]*RC[_\s-]*Voca\.mp3$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        private static readonly Regex VocaLcFileRegex = new(@"^Test[_\s-]?(0?[1-9]|10)[_\s-]*LC[_\s-]*Voca\.mp3$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
         public static AudioCatalog Scan(string root)
         {
@@ -62,34 +64,48 @@ namespace ToeicAudioHelper
                     continue;
                 }
 
-                // VOCA LC/RC by folder and filename heuristics
+                // VOCA LC/RC exact filename patterns first
+                var mRc = VocaRcFileRegex.Match(name);
+                var mLc = VocaLcFileRegex.Match(name);
+                if (mRc.Success || mLc.Success)
+                {
+                    int t = int.Parse((mRc.Success ? mRc : mLc).Groups[1].Value);
+                    var idx = ExtractVocaIndex(name, t);
+                    var vt = new VocaTrack(idx, file);
+                    if (mRc.Success)
+                    {
+                        if (!catalog.VocaRcByTest.TryGetValue(t, out var list)) { list = new List<VocaTrack>(); catalog.VocaRcByTest[t] = list; }
+                        list.Add(vt);
+                    }
+                    if (mLc.Success)
+                    {
+                        if (!catalog.VocaLcByTest.TryGetValue(t, out var list)) { list = new List<VocaTrack>(); catalog.VocaLcByTest[t] = list; }
+                        list.Add(vt);
+                    }
+                    continue;
+                }
+
+                // VOCA LC/RC by folder and filename heuristics (fallback)
                 var up = (dir + "\\" + name).ToUpperInvariant();
                 bool hasVoca = up.Contains("VOCA");
                 bool isLc = hasVoca && up.Contains("LC");
                 bool isRc = hasVoca && up.Contains("RC");
                 if (hasVoca)
                 {
-                    var t = ExtractTestFromPath(file);
-                    if (t.HasValue)
+                    var tOpt = ExtractTestFromPath(file);
+                    if (tOpt.HasValue)
                     {
-                        var idx = ExtractVocaIndex(name, t.Value);
+                        int t = tOpt.Value;
+                        var idx = ExtractVocaIndex(name, t);
                         var vt = new VocaTrack(idx, file);
                         if (isLc)
                         {
-                            if (!catalog.VocaLcByTest.TryGetValue(t.Value, out var list))
-                            {
-                                list = new List<VocaTrack>();
-                                catalog.VocaLcByTest[t.Value] = list;
-                            }
+                            if (!catalog.VocaLcByTest.TryGetValue(t, out var list)) { list = new List<VocaTrack>(); catalog.VocaLcByTest[t] = list; }
                             list.Add(vt);
                         }
                         if (isRc)
                         {
-                            if (!catalog.VocaRcByTest.TryGetValue(t.Value, out var list))
-                            {
-                                list = new List<VocaTrack>();
-                                catalog.VocaRcByTest[t.Value] = list;
-                            }
+                            if (!catalog.VocaRcByTest.TryGetValue(t, out var list)) { list = new List<VocaTrack>(); catalog.VocaRcByTest[t] = list; }
                             list.Add(vt);
                         }
                     }
