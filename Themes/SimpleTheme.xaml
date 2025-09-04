@@ -18,6 +18,43 @@
     <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
   </Style>
 
+  <!-- ToggleButton (dark): clearer border/checked accent -->
+  <Style TargetType="ToggleButton">
+    <Setter Property="Padding" Value="10,6"/>
+    <Setter Property="Margin" Value="0,0,8,0"/>
+    <Setter Property="Background" Value="#141414"/>
+    <Setter Property="BorderBrush" Value="#3A3A3A"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ToggleButton">
+          <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="bd" Property="Background" Value="#1F1F1F"/>
+              <Setter TargetName="bd" Property="BorderBrush" Value="#4A4A4A"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+              <Setter TargetName="bd" Property="Background" Value="#2E2E2E"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Opacity" Value="0.6"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+              <Setter TargetName="bd" Property="Background" Value="#111111"/>
+              <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource Brush.Primary}"/>
+              <Setter Property="Foreground" Value="{StaticResource Brush.Primary}"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
   <!-- RepeatButton styled like Button (dark) -->
   <Style TargetType="RepeatButton">
     <Setter Property="Padding" Value="10,6"/>
