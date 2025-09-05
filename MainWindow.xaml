@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ToeicAudioHelper"
         mc:Ignorable="d"
         Title="TOEIC Audio Helper"
-        Height="280" Width="520"
+        Height="300" Width="520"
         WindowStyle="None" Background="Transparent" AllowsTransparency="True">
     <Border Style="{StaticResource Shell}" Margin="8">
         <Grid>
