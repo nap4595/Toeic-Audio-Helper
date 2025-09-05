@@ -133,6 +133,8 @@
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="Padding" Value="6,2"/>
     <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
+    <Setter Property="MinHeight" Value="30"/>
+    <Setter Property="FontSize" Value="14"/>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="ComboBox">
@@ -193,6 +195,8 @@
     <Setter Property="Padding" Value="6,4"/>
     <Setter Property="BorderBrush" Value="#2A2A2A"/>
     <Setter Property="BorderThickness" Value="0,1,0,0"/>
+    <Setter Property="FontSize" Value="14"/>
+    <Setter Property="MinHeight" Value="26"/>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="ComboBoxItem">

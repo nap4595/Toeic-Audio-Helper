@@ -57,7 +57,7 @@
                     </Grid.ColumnDefinitions>
                     <!-- Left: Test, Play All, Question, Play Part -->
                     <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="0,0,6,0" Text="Test"/>
-                    <ComboBox Grid.Column="1" x:Name="CmbTest" SelectedIndex="0" VerticalAlignment="Center" Width="80">
+                    <ComboBox Grid.Column="1" x:Name="CmbTest" SelectedIndex="0" VerticalAlignment="Center" MinWidth="100">
                         <ComboBoxItem Content="01"/>
                         <ComboBoxItem Content="02"/>
                         <ComboBoxItem Content="03"/>
