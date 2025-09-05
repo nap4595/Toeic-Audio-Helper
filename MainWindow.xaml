@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToeicAudioHelper"
+        xmlns:UiKit="clr-namespace:UiKit.Wpf.Helpers;assembly=UiKit.Wpf"
         mc:Ignorable="d"
         Title="TOEIC Audio Helper"
         Height="300" Width="520"
@@ -16,7 +17,7 @@
             </Grid.RowDefinitions>
 
             <!-- Simple Top Bar -->
-            <Border Grid.Row="0" Style="{StaticResource TopBar}" MouseLeftButtonDown="TopBar_MouseLeftButtonDown">
+            <Border Grid.Row="0" Style="{StaticResource TopBar}" UiKit:WindowCommands.Attach="True" UiKit:ThemeCommands.Attach="True">
                 <DockPanel LastChildFill="False">
                     <TextBlock Text="TOEIC Audio Helper" VerticalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
@@ -26,6 +27,11 @@
                         <Button x:Name="BtnClose" Click="BtnClose_Click" Width="22" Height="22" Margin="4,0">✕</Button>
                     </StackPanel>
                 </DockPanel>
+                <Border.InputBindings>
+                    <MouseBinding Command="{x:Static UiKit:WindowCommands.DragMove}"
+                                  MouseAction="LeftClick"
+                                  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                </Border.InputBindings>
             </Border>
 
             <!-- Content -->
