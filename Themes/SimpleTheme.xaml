@@ -236,6 +236,18 @@
   </Style>
 
   <!-- Slider: terminal-like track and thumb (horizontal) -->
+  <Style x:Key="SliderTrackButtonStyle" TargetType="RepeatButton">
+    <Setter Property="Focusable" Value="False"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="RepeatButton">
+          <Grid Height="24" Background="#00000000">
+            <Border Height="4" VerticalAlignment="Center" Background="#2A2A2A" BorderBrush="#2A2A2A"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
   <Style TargetType="Slider">
     <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
     <Setter Property="Template">
@@ -245,10 +257,10 @@
             <Grid.RowDefinitions>
               <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Track x:Name="PART_Track" Height="4">
+            <Track x:Name="PART_Track" Height="24">
               <Track.DecreaseRepeatButton>
-                <!-- Remove progress fill: use same dark color as rest of track and disable default styles/focus -->
-                <RepeatButton Command="Slider.DecreaseLarge" Background="#2A2A2A" BorderBrush="#2A2A2A" Height="4" Focusable="False" Style="{x:Null}"/>
+                <!-- Wide hit area with thin visual bar -->
+                <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderTrackButtonStyle}"/>
               </Track.DecreaseRepeatButton>
               <Track.Thumb>
                 <Thumb Height="12" Width="12">
@@ -260,7 +272,7 @@
                 </Thumb>
               </Track.Thumb>
               <Track.IncreaseRepeatButton>
-                <RepeatButton Command="Slider.IncreaseLarge" Background="#2A2A2A" BorderBrush="#2A2A2A" Height="4" Focusable="False" Style="{x:Null}"/>
+                <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource SliderTrackButtonStyle}"/>
               </Track.IncreaseRepeatButton>
             </Track>
           </Grid>

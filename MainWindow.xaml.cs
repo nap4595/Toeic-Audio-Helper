@@ -245,8 +245,13 @@ namespace ToeicAudioHelper
 
         private void SldPosition_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (_isSliding) return;
-            // no-op: we drive slider from timer
+            // Always reflect slider value to current time label for instant feedback
+            try
+            {
+                var seconds = SldPosition.Value;
+                LblNow.Text = FormatTime(TimeSpan.FromSeconds(seconds));
+            }
+            catch { }
         }
 
         private void SldPosition_PreviewMouseDown(object sender, MouseButtonEventArgs e)
