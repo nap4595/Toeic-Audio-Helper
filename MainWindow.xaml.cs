@@ -202,6 +202,36 @@ namespace ToeicAudioHelper
             LblNow.Text = "00:00";
         }
 
+        private void BtnSeekBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (Player.Source == null) return;
+            try
+            {
+                var target = Player.Position - TimeSpan.FromSeconds(10);
+                if (target < TimeSpan.Zero) target = TimeSpan.Zero;
+                Player.Position = target;
+                SldPosition.Value = target.TotalSeconds;
+                LblNow.Text = FormatTime(target);
+            }
+            catch { }
+        }
+
+        private void BtnSeekForward_Click(object sender, RoutedEventArgs e)
+        {
+            if (Player.Source == null) return;
+            try
+            {
+                var maxSeconds = SldPosition.Maximum > 0 ? SldPosition.Maximum : (Player.NaturalDuration.HasTimeSpan ? Player.NaturalDuration.TimeSpan.TotalSeconds : 0);
+                var target = Player.Position + TimeSpan.FromSeconds(10);
+                if (maxSeconds > 0 && target.TotalSeconds > maxSeconds)
+                    target = TimeSpan.FromSeconds(maxSeconds);
+                Player.Position = target;
+                SldPosition.Value = target.TotalSeconds;
+                LblNow.Text = FormatTime(target);
+            }
+            catch { }
+        }
+
         private void Player_MediaOpened(object sender, RoutedEventArgs e)
         {
             if (Player.NaturalDuration.HasTimeSpan)

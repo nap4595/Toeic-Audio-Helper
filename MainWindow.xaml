@@ -102,9 +102,11 @@
                         <TextBlock x:Name="LblTotal" Grid.Column="2" VerticalAlignment="Center" Margin="8,0,0,0">00:00</TextBlock>
                     </Grid>
                     <StackPanel Orientation="Horizontal" Margin="0,8,0,0" HorizontalAlignment="Center">
+                        <Button x:Name="BtnSeekBack" Click="BtnSeekBack_Click" ToolTip="10초 뒤로">⏪</Button>
                         <Button x:Name="BtnPlay" Click="BtnPlay_Click">▶</Button>
                         <Button x:Name="BtnPause" Click="BtnPause_Click">⏸</Button>
                         <Button x:Name="BtnStop" Click="BtnStop_Click">⏹</Button>
+                        <Button x:Name="BtnSeekForward" Click="BtnSeekForward_Click" ToolTip="10초 앞으로">⏩</Button>
                     </StackPanel>
                     <DockPanel Margin="0,8,0,0">
                         <ToggleButton x:Name="TglRepeat" DockPanel.Dock="Left" ToolTip="Repeat" Checked="TglRepeat_Checked" Unchecked="TglRepeat_Unchecked">🔁</ToggleButton>
