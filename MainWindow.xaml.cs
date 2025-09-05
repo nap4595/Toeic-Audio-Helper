@@ -29,6 +29,7 @@ namespace ToeicAudioHelper
         private AudioCatalog _catalog = new AudioCatalog();
         private string? _currentFile;
         private bool _repeatEnabled = false;
+        private string _themeName = "dark"; // default
 
         public MainWindow()
         {
@@ -52,6 +53,14 @@ namespace ToeicAudioHelper
             WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
         private void BtnClose_Click(object sender, RoutedEventArgs e) => Close();
+        private void TglThemeMode_Click(object sender, RoutedEventArgs e)
+        {
+            var next = (_themeName == "dark") ? "light" : "dark";
+            ApplyTheme(next);
+            SaveTheme(next);
+            _themeName = next;
+            UpdateThemeToggleGlyph();
+        }
 
         private void BtnSelectFolder_Click(object sender, RoutedEventArgs e)
         {
@@ -434,10 +443,68 @@ namespace ToeicAudioHelper
         protected override void OnContentRendered(EventArgs e)
         {
             base.OnContentRendered(e);
+            // Load theme preference
+            try
+            {
+                var t = LoadTheme();
+                if (t == "dark" || t == "light")
+                {
+                    ApplyTheme(t);
+                    _themeName = t;
+                    UpdateThemeToggleGlyph();
+                }
+                else
+                {
+                    ApplyTheme(_themeName);
+                    UpdateThemeToggleGlyph();
+                }
+            }
+            catch { }
             if (string.IsNullOrWhiteSpace(_root))
             {
                 LoadLastRoot();
             }
+        }
+
+        private void UpdateThemeToggleGlyph()
+        {
+            if (TglThemeMode == null) return;
+            TglThemeMode.Content = _themeName == "dark" ? "☀" : "🌙";
+            TglThemeMode.ToolTip = _themeName == "dark" ? "Switch to Light" : "Switch to Dark";
+        }
+
+        private void ApplyTheme(string name)
+        {
+            try
+            {
+                var dicts = Application.Current.Resources.MergedDictionaries;
+                // Remove existing theme dicts
+                for (int i = dicts.Count - 1; i >= 0; i--)
+                {
+                    var src = dicts[i].Source?.ToString() ?? string.Empty;
+                    if (src.Contains("Themes/Theme.Dark.xaml") || src.Contains("Themes/Theme.Light.xaml"))
+                        dicts.RemoveAt(i);
+                }
+                var uri = new Uri(name == "light" ? "Themes/Theme.Light.xaml" : "Themes/Theme.Dark.xaml", UriKind.Relative);
+                dicts.Add(new ResourceDictionary { Source = uri });
+            }
+            catch { }
+        }
+
+        private static string GetThemeFile() => System.IO.Path.Combine(GetConfigDir(), "theme.txt");
+        private static void SaveTheme(string name)
+        {
+            try { File.WriteAllText(GetThemeFile(), name ?? "dark"); } catch { }
+        }
+        private static string LoadTheme()
+        {
+            try
+            {
+                var f = GetThemeFile();
+                if (File.Exists(f)) return File.ReadAllText(f).Trim();
+            }
+            catch { }
+            return "dark";
         }
     }
 }

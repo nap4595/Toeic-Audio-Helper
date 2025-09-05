@@ -20,6 +20,7 @@
                 <DockPanel LastChildFill="False">
                     <TextBlock Text="TOEIC Audio Helper" VerticalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                        <ToggleButton x:Name="TglThemeMode" Click="TglThemeMode_Click" Width="22" Height="22" Margin="4,0" ToolTip="Toggle Theme">☀</ToggleButton>
                         <Button x:Name="BtnMin" Click="BtnMin_Click" Width="22" Height="22" Margin="4,0">−</Button>
                         <Button x:Name="BtnMax" Click="BtnMax_Click" Width="22" Height="22" Margin="4,0">▢</Button>
                         <Button x:Name="BtnClose" Click="BtnClose_Click" Width="22" Height="22" Margin="4,0">✕</Button>
