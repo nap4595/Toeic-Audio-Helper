@@ -112,8 +112,16 @@
                 <ColumnDefinition Width="22"/>
               </Grid.ColumnDefinitions>
               <ToggleButton x:Name="DropDownToggle" Grid.ColumnSpan="2" Focusable="False" ClickMode="Press"
-                            Background="#00000000" BorderBrush="{x:Null}" BorderThickness="0" Panel.ZIndex="10"
-                            IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
+                            Background="Transparent" BorderBrush="{x:Null}" BorderThickness="0" Panel.ZIndex="10"
+                            OverridesDefaultStyle="True"
+                            IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                <ToggleButton.Template>
+                  <ControlTemplate TargetType="ToggleButton">
+                    <!-- pure hit-target, no visuals to avoid double-hover/selection layering -->
+                    <Border Background="Transparent"/>
+                  </ControlTemplate>
+                </ToggleButton.Template>
+              </ToggleButton>
               <!-- Explicit selected text to ensure correct foreground in selection box -->
               <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
                          Text="{Binding SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
