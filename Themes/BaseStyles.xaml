@@ -112,13 +112,13 @@
                 <ColumnDefinition Width="22"/>
               </Grid.ColumnDefinitions>
               <ToggleButton x:Name="DropDownToggle" Grid.ColumnSpan="2" Focusable="False" ClickMode="Press"
-                            Background="#00000000" BorderBrush="{x:Null}" BorderThickness="0"
+                            Background="#00000000" BorderBrush="{x:Null}" BorderThickness="0" Panel.ZIndex="10"
                             IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
               <ContentPresenter Margin="6,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
                                 Content="{TemplateBinding SelectionBoxItem}"
                                 ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                 ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
-              <Border Grid.Column="1" Background="{DynamicResource Brush.ControlBg}" BorderBrush="{DynamicResource Brush.ControlBorder}" BorderThickness="0,0,0,0">
+              <Border Grid.Column="1" Background="#00000000" BorderBrush="{DynamicResource Brush.ControlBorder}" BorderThickness="0,0,0,0">
                 <TextBlock Text="▾" Foreground="{DynamicResource Brush.Text}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
               </Border>
             </Grid>
