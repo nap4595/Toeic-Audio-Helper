@@ -114,10 +114,10 @@
               <ToggleButton x:Name="DropDownToggle" Grid.ColumnSpan="2" Focusable="False" ClickMode="Press"
                             Background="#00000000" BorderBrush="{x:Null}" BorderThickness="0" Panel.ZIndex="10"
                             IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
-              <ContentPresenter Margin="6,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Content="{TemplateBinding SelectionBoxItem}"
-                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
+              <!-- Explicit selected text to ensure correct foreground in selection box -->
+              <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
+                         Text="{Binding SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
+                         Foreground="{DynamicResource Brush.Text}"/>
               <Border Grid.Column="1" Background="#00000000" BorderBrush="{DynamicResource Brush.ControlBorder}" BorderThickness="0,0,0,0">
                 <TextBlock Text="▾" Foreground="{DynamicResource Brush.Text}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
               </Border>
@@ -132,8 +132,11 @@
             </Popup>
           </Grid>
           <ControlTemplate.Triggers>
+            <!-- Closed box hover: subtle — no fill, accent outline only -->
             <Trigger Property="IsMouseOver" Value="True">
-              <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Brush.ControlHoverBorder}"/>
+              <Setter TargetName="Bd" Property="Background" Value="Transparent"/>
+              <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
+              <Setter TargetName="Bd" Property="BorderThickness" Value="1"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
               <Setter Property="Opacity" Value="0.6"/>
