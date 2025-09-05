@@ -25,4 +25,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\UiKit.Wpf\UiKit.Wpf.csproj" />
+  </ItemGroup>
+
 </Project>

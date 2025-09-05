@@ -6,7 +6,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Themes/BaseStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/UiKit.Wpf;component/Themes/BaseStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/UiKit.Wpf;component/Themes/Theme.Dark.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

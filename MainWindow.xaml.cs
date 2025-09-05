@@ -486,7 +486,7 @@ namespace ToeicAudioHelper
                     if (src.Contains("Themes/Theme.Dark.xaml") || src.Contains("Themes/Theme.Light.xaml"))
                         dicts.RemoveAt(i);
                 }
-                var uri = new Uri(name == "light" ? "Themes/Theme.Light.xaml" : "Themes/Theme.Dark.xaml", UriKind.Relative);
+                var uri = new Uri(name == "light" ? "UiKit.Wpf;component/Themes/Theme.Light.xaml" : "UiKit.Wpf;component/Themes/Theme.Dark.xaml", UriKind.RelativeOrAbsolute);
                 dicts.Add(new ResourceDictionary { Source = uri });
             }
             catch { }
