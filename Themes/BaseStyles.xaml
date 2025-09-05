@@ -11,8 +11,8 @@
     <Setter Property="Foreground" Value="{DynamicResource Brush.Text}"/>
   </Style>
 
-  <!-- Buttons (use dynamic brushes) -->
-  <Style TargetType="Button">
+  <!-- Base style for ButtonBase (applies to Button/RepeatButton) -->
+  <Style x:Key="BaseButtonStyle" TargetType="{x:Type ButtonBase}">
     <Setter Property="Padding" Value="10,6"/>
     <Setter Property="Margin" Value="0,0,8,0"/>
     <Setter Property="Background" Value="{DynamicResource Brush.ControlBg}"/>
@@ -21,7 +21,7 @@
     <Setter Property="Cursor" Value="Hand"/>
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="Button">
+        <ControlTemplate TargetType="{x:Type ButtonBase}">
           <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0">
             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
           </Border>
@@ -42,8 +42,11 @@
     </Setter>
   </Style>
 
+  <!-- Buttons (use dynamic brushes) -->
+  <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}"/>
+
   <!-- RepeatButton matches Button -->
-  <Style TargetType="RepeatButton" BasedOn="{StaticResource {x:Type Button}}"/>
+  <Style TargetType="RepeatButton" BasedOn="{StaticResource BaseButtonStyle}"/>
 
   <!-- ToggleButton -->
   <Style TargetType="ToggleButton">
@@ -233,4 +236,3 @@
   </Style>
 
 </ResourceDictionary>
-

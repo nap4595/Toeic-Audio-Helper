@@ -116,7 +116,7 @@
                             <Button x:Name="BtnPlayVocaRc" Click="BtnPlayVocaRc_Click">VOCA RC</Button>
                         </StackPanel>
                     </DockPanel>
-                    <TextBlock x:Name="TxtStatus" Margin="0,8,0,0" Foreground="{StaticResource Brush.Muted}"/>
+                    <TextBlock x:Name="TxtStatus" Margin="0,8,0,0" Foreground="{DynamicResource Brush.Muted}"/>
                     <TextBlock x:Name="TxtNowPlaying" Margin="0,8,0,0" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>

@@ -469,8 +469,9 @@ namespace ToeicAudioHelper
         private void UpdateThemeToggleGlyph()
         {
             if (TglThemeMode == null) return;
-            TglThemeMode.Content = _themeName == "dark" ? "☀" : "🌙";
-            TglThemeMode.ToolTip = _themeName == "dark" ? "Switch to Light" : "Switch to Dark";
+            // Show current theme icon (inverted from previous behavior)
+            TglThemeMode.Content = _themeName == "dark" ? "🌙" : "☀";
+            TglThemeMode.ToolTip = _themeName == "dark" ? "Dark" : "Light";
         }
 
         private void ApplyTheme(string name)
