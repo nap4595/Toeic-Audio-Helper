@@ -4,7 +4,7 @@
   <SolidColorBrush x:Key="Brush.Canvas" Color="#222b35"/>
   <SolidColorBrush x:Key="Brush.TopBar" Color="#1e2732"/>
   <SolidColorBrush x:Key="Brush.Frame" Color="#a0acbd"/>
-  <SolidColorBrush x:Key="Brush.Accent" Color="#3a96dd"/>
+  <SolidColorBrush x:Key="Brush.Accent" Color="#d77757"/>
   <SolidColorBrush x:Key="Brush.Text" Color="#E9EEF3"/>
   <SolidColorBrush x:Key="Brush.Muted" Color="#B8C3D1"/>
 
