@@ -159,8 +159,11 @@
             <ContentPresenter Margin="4,0,4,0" VerticalAlignment="Center"/>
           </Border>
           <ControlTemplate.Triggers>
+            <!-- Subtle hover: no fill, just accent outline -->
             <Trigger Property="IsMouseOver" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="{DynamicResource Brush.ControlHoverBg}"/>
+              <Setter TargetName="bd" Property="Background" Value="Transparent"/>
+              <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
+              <Setter TargetName="bd" Property="BorderThickness" Value="1"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
               <Setter TargetName="bd" Property="Background" Value="{DynamicResource Brush.ControlHoverBg}"/>
