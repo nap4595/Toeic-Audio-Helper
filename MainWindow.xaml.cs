@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -465,14 +465,8 @@ namespace ToeicAudioHelper
                 LoadLastRoot();
             }
         }
+        private void UpdateThemeToggleGlyph() { }
 
-        private void UpdateThemeToggleGlyph()
-        {
-            if (TglThemeMode == null) return;
-            // Show current theme icon (inverted from previous behavior)
-            TglThemeMode.Content = _themeName == "dark" ? "🌙" : "☀";
-            TglThemeMode.ToolTip = _themeName == "dark" ? "Dark" : "Light";
-        }
 
         private void ApplyTheme(string name)
         {
@@ -509,3 +503,4 @@ namespace ToeicAudioHelper
         }
     }
 }
+
