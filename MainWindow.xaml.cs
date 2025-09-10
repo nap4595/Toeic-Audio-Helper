@@ -67,12 +67,14 @@ namespace ToeicAudioHelper
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            // 즉시 이벤트 처리를 방지하여 다른 컨트롤로 전파되지 않도록 함
+            // TxtQuestion에 포커스가 있으면 해당 컨트롤에서 처리하도록 함
+            bool txtQuestionHasFocus = TxtQuestion.IsFocused;
+            
             switch (e.Key)
             {
                 case Key.Space:
-                    e.Handled = true; // 먼저 이벤트 전파 방지
-                    _questionEditMode = false; // 다른 키 입력 시 편집 모드 해제
+                    e.Handled = true;
+                    _questionEditMode = false;
                     TogglePlayPause();
                     break;
                 case Key.Left:
@@ -91,19 +93,27 @@ namespace ToeicAudioHelper
                     ToggleMode();
                     break;
                 case Key.Up:
-                    e.Handled = true;
-                    HandleUpArrow();
+                    if (!txtQuestionHasFocus) // TxtQuestion에 포커스가 없을 때만 처리
+                    {
+                        e.Handled = true;
+                        HandleUpArrow();
+                    }
                     break;
                 case Key.Down:
-                    e.Handled = true;
-                    HandleDownArrow();
+                    if (!txtQuestionHasFocus) // TxtQuestion에 포커스가 없을 때만 처리
+                    {
+                        e.Handled = true;
+                        HandleDownArrow();
+                    }
                     break;
                 case Key.Enter:
-                    e.Handled = true; // 항상 우리의 LOAD 기능만 호출
-                    _questionEditMode = false;
-                    HandleEnterKey();
-                    // Window에 포커스를 주어 버튼 포커스 해제
-                    this.Focus();
+                    if (!txtQuestionHasFocus) // TxtQuestion에 포커스가 없을 때만 처리
+                    {
+                        e.Handled = true;
+                        _questionEditMode = false;
+                        HandleEnterKey();
+                        this.Focus();
+                    }
                     break;
                 case Key.D0:
                 case Key.D1:
@@ -125,7 +135,7 @@ namespace ToeicAudioHelper
                 case Key.NumPad7:
                 case Key.NumPad8:
                 case Key.NumPad9:
-                    if (!_isFullTestMode && _questionEditMode)
+                    if (!_isFullTestMode && _questionEditMode && !txtQuestionHasFocus)
                     {
                         e.Handled = true;
                         HandleNumberInput(e.Key);
@@ -134,7 +144,7 @@ namespace ToeicAudioHelper
                 case Key.Escape:
                     e.Handled = true;
                     _questionEditMode = false;
-                    this.Focus(); // Window로 포커스 이동
+                    this.Focus();
                     break;
             }
         }
@@ -463,21 +473,26 @@ namespace ToeicAudioHelper
             switch (e.Key)
             {
                 case Key.Enter:
-                    _questionEditMode = false; // 엔터키로 편집 모드 해제
+                    // 입력 완료 후 포커스 해제하고 LOAD 실행
+                    _questionEditMode = false;
                     if (int.TryParse(TxtQuestion.Text, out var q))
                     {
                         TxtQuestion.Text = PadQuestion(q);
                     }
                     e.Handled = true;
-                    // Window로 포커스 이동하여 전역 키보드 단축키 활성화
-                    this.Focus();
-                    // 포커스 이동 후 LOAD 실행
-                    if (!_isFullTestMode)
-                    {
-                        BtnPlayPart_Click(this, new RoutedEventArgs());
-                    }
+                    this.Focus(); // Window로 포커스 이동
+                    
+                    // 포커스 이동 완료 후 LOAD 실행
+                    Dispatcher.BeginInvoke(new Action(() => {
+                        if (!_isFullTestMode)
+                        {
+                            BtnPlayPart_Click(this, new RoutedEventArgs());
+                        }
+                    }), System.Windows.Threading.DispatcherPriority.Input);
                     break;
+                    
                 case Key.Up:
+                    // Question 모드에서만 화살표 처리
                     if (!_isFullTestMode)
                     {
                         e.Handled = true;
@@ -486,7 +501,9 @@ namespace ToeicAudioHelper
                         TxtQuestion.SelectAll();
                     }
                     break;
+                    
                 case Key.Down:
+                    // Question 모드에서만 화살표 처리
                     if (!_isFullTestMode)
                     {
                         e.Handled = true;
@@ -495,10 +512,12 @@ namespace ToeicAudioHelper
                         TxtQuestion.SelectAll();
                     }
                     break;
+                    
                 case Key.Escape:
+                    // 편집 취소하고 포커스 해제
                     e.Handled = true;
                     _questionEditMode = false;
-                    this.Focus(); // Window로 포커스 이동
+                    this.Focus();
                     break;
             }
         }
@@ -552,8 +571,12 @@ namespace ToeicAudioHelper
                 // Question 모드: 문항 번호 1 증가 후 편집 모드 활성화
                 BtnQUp_Click(this, new RoutedEventArgs());
                 _questionEditMode = true;
-                TxtQuestion.Focus();
-                TxtQuestion.SelectAll(); // 전체 선택하여 다음 입력 시 교체되도록
+                
+                // 키 처리 완료 후 포커스 설정 (충돌 방지)
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TxtQuestion.Focus();
+                    TxtQuestion.SelectAll();
+                }), System.Windows.Threading.DispatcherPriority.Input);
             }
         }
 
@@ -574,8 +597,12 @@ namespace ToeicAudioHelper
                 // Question 모드: 문항 번호 1 감소 후 편집 모드 활성화
                 BtnQDown_Click(this, new RoutedEventArgs());
                 _questionEditMode = true;
-                TxtQuestion.Focus();
-                TxtQuestion.SelectAll(); // 전체 선택하여 다음 입력 시 교체되도록
+                
+                // 키 처리 완료 후 포커스 설정 (충돌 방지)
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TxtQuestion.Focus();
+                    TxtQuestion.SelectAll();
+                }), System.Windows.Threading.DispatcherPriority.Input);
             }
         }
 
