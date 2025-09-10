@@ -4,7 +4,54 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:UiKit="clr-namespace:UiKit.Wpf.Controls;assembly=UiKit.Wpf"
         Title="TOEIC Audio Helper" Height="300" Width="520"
-        WindowStyle="None" Background="Transparent" AllowsTransparency="True">
+        WindowStyle="None" Background="Transparent" AllowsTransparency="True"
+        KeyDown="Window_KeyDown" Focusable="True">
+    <Window.Resources>
+                <Style x:Key="StrongRepeatToggle" TargetType="ToggleButton">
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Brush.ControlBorder}"/>
+            <Setter Property="Background" Value="{DynamicResource Brush.ControlBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Brush.Text}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Checked: force accent fill and text regardless of hover/press -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Brush.Accent}"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource Brush.SelectionText}"/>
+                            </Trigger>
+                            <!-- Hover only when not checked -->
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Brush.ControlHoverBg}"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource Brush.ControlHoverBorder}"/>
+                            </MultiTrigger>
+                            <!-- Pressed only when not checked -->
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsPressed" Value="True"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Brush.ControlPressedBg}"/>
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Border Style="{StaticResource Shell}" Margin="8">
         <Grid>
             <Grid.RowDefinitions>
@@ -50,8 +97,8 @@
                         </Grid.ColumnDefinitions>
                         <TextBox x:Name="TxtQuestion" Grid.Column="0" PreviewTextInput="TxtQuestion_PreviewTextInput" MaxLength="3" VerticalContentAlignment="Center" TextAlignment="Center" LostFocus="TxtQuestion_LostFocus" KeyDown="TxtQuestion_KeyDown"/>
                         <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right">
-                            <RepeatButton x:Name="BtnQUp" Click="BtnQUp_Click" Width="24" Height="16" Padding="0" Margin="4,0,0,0" Delay="300" Interval="80" />
-                            <RepeatButton x:Name="BtnQDown" Click="BtnQDown_Click" Width="24" Height="16" Padding="0" Margin="4,4,0,0" Delay="300" Interval="80" />
+                            <RepeatButton x:Name="BtnQUp" Click="BtnQUp_Click" Width="24" Height="16" Padding="0" Margin="4,0,0,0" Delay="300" Interval="80"  Style="{StaticResource IconGlyphRepeatButton}">&#xE70E;</RepeatButton>
+                            <RepeatButton x:Name="BtnQDown" Click="BtnQDown_Click" Width="24" Height="16" Padding="0" Margin="4,4,0,0" Delay="300" Interval="80"  Style="{StaticResource IconGlyphRepeatButton}">&#xE70D;</RepeatButton>
                         </StackPanel>
                     </Grid>
                     <Button Grid.Column="5" x:Name="BtnPlayPart" Click="BtnPlayPart_Click" Margin="8,0,0,0">Play Part</Button>
@@ -70,14 +117,13 @@
                         <TextBlock x:Name="LblTotal" Grid.Column="2" VerticalAlignment="Center" Margin="8,0,0,0">00:00</TextBlock>
                     </Grid>
                     <StackPanel Orientation="Horizontal" Margin="0,8,0,0" HorizontalAlignment="Center">
-                        <Button x:Name="BtnSeekBack" Click="BtnSeekBack_Click" ToolTip="10s Back">&lt;&lt;</Button>
-                        <Button x:Name="BtnPlay" Click="BtnPlay_Click">Play</Button>
-                        <Button x:Name="BtnPause" Click="BtnPause_Click">Pause</Button>
-                        <Button x:Name="BtnStop" Click="BtnStop_Click">Stop</Button>
-                        <Button x:Name="BtnSeekForward" Click="BtnSeekForward_Click" ToolTip="10s Forward">&gt;&gt;</Button>
+                        <Button x:Name="BtnSeekBack" Click="BtnSeekBack_Click" ToolTip="5s Back" Style="{StaticResource IconGlyphButton}" Margin="6,0,6,0">&#xE892;</Button>
+                        <Button x:Name="BtnPlayPause" Click="BtnPlayPause_Click" Style="{StaticResource IconGlyphButton}" Margin="6,0,6,0">&#xE768;</Button>
+                        <Button x:Name="BtnStop" Click="BtnStop_Click" Style="{StaticResource IconGlyphButton}" Margin="6,0,6,0">&#xE71A;</Button>
+                        <Button x:Name="BtnSeekForward" Click="BtnSeekForward_Click" ToolTip="5s Forward" Style="{StaticResource IconGlyphButton}" Margin="6,0,6,0">&#xE893;</Button>
                     </StackPanel>
                     <DockPanel Margin="0,8,0,0">
-                        <ToggleButton x:Name="TglRepeat" DockPanel.Dock="Left" ToolTip="Repeat" Checked="TglRepeat_Checked" Unchecked="TglRepeat_Unchecked">R</ToggleButton>
+                        <ToggleButton x:Name="TglRepeat" DockPanel.Dock="Left" ToolTip="Repeat" Checked="TglRepeat_Checked" Unchecked="TglRepeat_Unchecked" Style="{StaticResource StrongRepeatToggle}">R</ToggleButton>
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                             <Button x:Name="BtnPlayVocaLc" Click="BtnPlayVocaLc_Click">VOCA LC</Button>
                             <Button x:Name="BtnPlayVocaRc" Click="BtnPlayVocaRc_Click">VOCA RC</Button>
@@ -90,3 +136,14 @@
         </Grid>
     </Border>
 </Window>
+
+
+
+
+
+
+
+
+
+
+

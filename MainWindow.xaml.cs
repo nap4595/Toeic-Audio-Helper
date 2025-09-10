@@ -30,6 +30,7 @@ namespace ToeicAudioHelper
         private string? _currentFile;
         private bool _repeatEnabled = false;
         private string _themeName = "dark"; // default
+        private bool _isPlaying = false;
 
         public MainWindow()
         {
@@ -60,6 +61,26 @@ namespace ToeicAudioHelper
             SaveTheme(next);
             _themeName = next;
             UpdateThemeToggleGlyph();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            // 즉시 이벤트 처리를 방지하여 다른 컨트롤로 전파되지 않도록 함
+            switch (e.Key)
+            {
+                case Key.Space:
+                    e.Handled = true; // 먼저 이벤트 전파 방지
+                    TogglePlayPause();
+                    break;
+                case Key.Left:
+                    e.Handled = true;
+                    BtnSeekBack_Click(this, new RoutedEventArgs());
+                    break;
+                case Key.Right:
+                    e.Handled = true;
+                    BtnSeekForward_Click(this, new RoutedEventArgs());
+                    break;
+            }
         }
 
         private void BtnSelectFolder_Click(object sender, RoutedEventArgs e)
@@ -112,7 +133,7 @@ namespace ToeicAudioHelper
             var t = SelectedTest();
             if (_catalog.OverallByTest.TryGetValue(t, out var path))
             {
-                PlayFile(path);
+                LoadFile(path);
             }
             else
             {
@@ -139,7 +160,7 @@ namespace ToeicAudioHelper
                 MessageBox.Show($"Test {t:00} - 문항 {q}에 해당하는 파일이 없습니다.");
                 return;
             }
-            PlayFile(seg.FilePath);
+            LoadFile(seg.FilePath);
         }
 
         private void BtnPlayVocaLc_Click(object sender, RoutedEventArgs e)
@@ -147,7 +168,7 @@ namespace ToeicAudioHelper
             var t = SelectedTest();
             if (_catalog.VocaLcByTest.TryGetValue(t, out var list) && list.Count > 0)
             {
-                PlayFile(list[0].FilePath);
+                LoadFile(list[0].FilePath);
             }
             else MessageBox.Show($"Test {t:00} LC VOCA 파일을 찾을 수 없습니다.");
         }
@@ -157,12 +178,12 @@ namespace ToeicAudioHelper
             var t = SelectedTest();
             if (_catalog.VocaRcByTest.TryGetValue(t, out var list) && list.Count > 0)
             {
-                PlayFile(list[0].FilePath);
+                LoadFile(list[0].FilePath);
             }
             else MessageBox.Show($"Test {t:00} RC VOCA 파일을 찾을 수 없습니다.");
         }
 
-        private void PlayFile(string path)
+        private void LoadFile(string path)
         {
             try
             {
@@ -175,29 +196,43 @@ namespace ToeicAudioHelper
                 TxtNowPlaying.Text = System.IO.Path.GetFileName(path);
                 Player.Stop();
                 Player.Source = new Uri(path);
-                Player.Play();
-                StartPositionTimer();
+                // 파일만 로드하고 재생하지 않음
+                StopPositionTimer();
+                _isPlaying = false;
+                BtnPlayPause.Content = "\uE768"; // Play icon
+                SldPosition.Value = 0;
+                LblNow.Text = "00:00";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("재생 중 오류: " + ex.Message);
+                MessageBox.Show("파일 로드 중 오류: " + ex.Message);
             }
         }
 
-        private void BtnPlay_Click(object sender, RoutedEventArgs e)
+        private void BtnPlayPause_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.Source != null)
+            TogglePlayPause();
+        }
+
+        private void TogglePlayPause()
+        {
+            if (Player.Source == null) return;
+            
+            if (_isPlaying)
+            {
+                Player.Pause();
+                StopPositionTimer();
+                _isPlaying = false;
+                BtnPlayPause.Content = "\uE768"; // Play icon
+            }
+            else
             {
                 _isSliding = false;
                 Player.Play();
                 StartPositionTimer();
+                _isPlaying = true;
+                BtnPlayPause.Content = "\uE769"; // Pause icon
             }
-        }
-
-        private void BtnPause_Click(object sender, RoutedEventArgs e)
-        {
-            if (Player.Source != null) Player.Pause();
-            StopPositionTimer();
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
@@ -209,6 +244,8 @@ namespace ToeicAudioHelper
             StopPositionTimer();
             SldPosition.Value = 0;
             LblNow.Text = "00:00";
+            _isPlaying = false;
+            BtnPlayPause.Content = "\uE768"; // Play icon
         }
 
         private void BtnSeekBack_Click(object sender, RoutedEventArgs e)
@@ -216,7 +253,7 @@ namespace ToeicAudioHelper
             if (Player.Source == null) return;
             try
             {
-                var target = Player.Position - TimeSpan.FromSeconds(10);
+                var target = Player.Position - TimeSpan.FromSeconds(5);
                 if (target < TimeSpan.Zero) target = TimeSpan.Zero;
                 Player.Position = target;
                 SldPosition.Value = target.TotalSeconds;
@@ -231,7 +268,7 @@ namespace ToeicAudioHelper
             try
             {
                 var maxSeconds = SldPosition.Maximum > 0 ? SldPosition.Maximum : (Player.NaturalDuration.HasTimeSpan ? Player.NaturalDuration.TimeSpan.TotalSeconds : 0);
-                var target = Player.Position + TimeSpan.FromSeconds(10);
+                var target = Player.Position + TimeSpan.FromSeconds(5);
                 if (maxSeconds > 0 && target.TotalSeconds > maxSeconds)
                     target = TimeSpan.FromSeconds(maxSeconds);
                 Player.Position = target;
@@ -260,6 +297,8 @@ namespace ToeicAudioHelper
                     Player.Position = TimeSpan.Zero;
                     Player.Play();
                     StartPositionTimer();
+                    _isPlaying = true;
+                    BtnPlayPause.Content = "\uE769"; // Pause icon
                 }
                 catch { }
                 return;
@@ -268,6 +307,8 @@ namespace ToeicAudioHelper
             try { Player.Stop(); Player.Position = TimeSpan.Zero; } catch { }
             SldPosition.Value = 0;
             LblNow.Text = "00:00";
+            _isPlaying = false;
+            BtnPlayPause.Content = "\uE768"; // Play icon
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
