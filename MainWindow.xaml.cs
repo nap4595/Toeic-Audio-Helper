@@ -460,16 +460,46 @@ namespace ToeicAudioHelper
 
         private void TxtQuestion_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                _questionEditMode = false; // 엔터키로 편집 모드 해제
-                if (int.TryParse(TxtQuestion.Text, out var q))
-                {
-                    TxtQuestion.Text = PadQuestion(q);
-                }
-                e.Handled = true;
-                // Window로 포커스 이동하여 전역 키보드 단축키 활성화
-                this.Focus();
+                case Key.Enter:
+                    _questionEditMode = false; // 엔터키로 편집 모드 해제
+                    if (int.TryParse(TxtQuestion.Text, out var q))
+                    {
+                        TxtQuestion.Text = PadQuestion(q);
+                    }
+                    e.Handled = true;
+                    // Window로 포커스 이동하여 전역 키보드 단축키 활성화
+                    this.Focus();
+                    // 포커스 이동 후 LOAD 실행
+                    if (!_isFullTestMode)
+                    {
+                        BtnPlayPart_Click(this, new RoutedEventArgs());
+                    }
+                    break;
+                case Key.Up:
+                    if (!_isFullTestMode)
+                    {
+                        e.Handled = true;
+                        BtnQUp_Click(this, new RoutedEventArgs());
+                        _questionEditMode = true;
+                        TxtQuestion.SelectAll();
+                    }
+                    break;
+                case Key.Down:
+                    if (!_isFullTestMode)
+                    {
+                        e.Handled = true;
+                        BtnQDown_Click(this, new RoutedEventArgs());
+                        _questionEditMode = true;
+                        TxtQuestion.SelectAll();
+                    }
+                    break;
+                case Key.Escape:
+                    e.Handled = true;
+                    _questionEditMode = false;
+                    this.Focus(); // Window로 포커스 이동
+                    break;
             }
         }
 
