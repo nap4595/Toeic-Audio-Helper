@@ -40,6 +40,10 @@ namespace ToeicAudioHelper
             _timer.Interval = TimeSpan.FromMilliseconds(200);
             _timer.Tick += Timer_Tick;
             UpdateStatus("폴더를 먼저 선택하세요.");
+            
+            // 초기 상태를 Full Test 모드로 설정
+            TglMode.IsChecked = true;
+            _isFullTestMode = true;
         }
 
         // Simple custom chrome
@@ -473,22 +477,25 @@ namespace ToeicAudioHelper
             switch (e.Key)
             {
                 case Key.Enter:
-                    // 입력 완료 후 포커스 해제하고 LOAD 실행
+                    // 엔터키: 번호 확정 → 편집 모드 해제 → 포커스 해제 → LOAD 실행
+                    e.Handled = true;
                     _questionEditMode = false;
+                    
+                    // 번호 형식 정리
                     if (int.TryParse(TxtQuestion.Text, out var q))
                     {
                         TxtQuestion.Text = PadQuestion(q);
                     }
-                    e.Handled = true;
-                    this.Focus(); // Window로 포커스 이동
                     
-                    // 포커스 이동 완료 후 LOAD 실행
-                    Dispatcher.BeginInvoke(new Action(() => {
-                        if (!_isFullTestMode)
-                        {
-                            BtnPlayPart_Click(this, new RoutedEventArgs());
-                        }
-                    }), System.Windows.Threading.DispatcherPriority.Input);
+                    // 포커스를 Window로 이동
+                    Keyboard.ClearFocus();
+                    this.Focus();
+                    
+                    // LOAD 실행
+                    if (!_isFullTestMode)
+                    {
+                        BtnPlayPart_Click(this, new RoutedEventArgs());
+                    }
                     break;
                     
                 case Key.Up:
@@ -514,9 +521,10 @@ namespace ToeicAudioHelper
                     break;
                     
                 case Key.Escape:
-                    // 편집 취소하고 포커스 해제
+                    // ESC: 편집 모드 해제 → 포커스 해제
                     e.Handled = true;
                     _questionEditMode = false;
+                    Keyboard.ClearFocus();
                     this.Focus();
                     break;
             }
