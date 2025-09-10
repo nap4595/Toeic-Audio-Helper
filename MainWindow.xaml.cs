@@ -32,6 +32,7 @@ namespace ToeicAudioHelper
         private string _themeName = "dark"; // default
         private bool _isPlaying = false;
         private bool _isFullTestMode = true; // true: Full Test mode, false: Question mode
+        private bool _questionEditMode = false; // Question 모드에서 화살표 조작 후 직접 입력 대기 상태
 
         public MainWindow()
         {
@@ -71,18 +72,22 @@ namespace ToeicAudioHelper
             {
                 case Key.Space:
                     e.Handled = true; // 먼저 이벤트 전파 방지
+                    _questionEditMode = false; // 다른 키 입력 시 편집 모드 해제
                     TogglePlayPause();
                     break;
                 case Key.Left:
                     e.Handled = true;
+                    _questionEditMode = false;
                     BtnSeekBack_Click(this, new RoutedEventArgs());
                     break;
                 case Key.Right:
                     e.Handled = true;
+                    _questionEditMode = false;
                     BtnSeekForward_Click(this, new RoutedEventArgs());
                     break;
                 case Key.Tab:
                     e.Handled = true;
+                    _questionEditMode = false;
                     ToggleMode();
                     break;
                 case Key.Up:
@@ -94,8 +99,42 @@ namespace ToeicAudioHelper
                     HandleDownArrow();
                     break;
                 case Key.Enter:
-                    e.Handled = true;
+                    e.Handled = true; // 항상 우리의 LOAD 기능만 호출
+                    _questionEditMode = false;
                     HandleEnterKey();
+                    // Window에 포커스를 주어 버튼 포커스 해제
+                    this.Focus();
+                    break;
+                case Key.D0:
+                case Key.D1:
+                case Key.D2:
+                case Key.D3:
+                case Key.D4:
+                case Key.D5:
+                case Key.D6:
+                case Key.D7:
+                case Key.D8:
+                case Key.D9:
+                case Key.NumPad0:
+                case Key.NumPad1:
+                case Key.NumPad2:
+                case Key.NumPad3:
+                case Key.NumPad4:
+                case Key.NumPad5:
+                case Key.NumPad6:
+                case Key.NumPad7:
+                case Key.NumPad8:
+                case Key.NumPad9:
+                    if (!_isFullTestMode && _questionEditMode)
+                    {
+                        e.Handled = true;
+                        HandleNumberInput(e.Key);
+                    }
+                    break;
+                case Key.Escape:
+                    e.Handled = true;
+                    _questionEditMode = false;
+                    this.Focus(); // Window로 포커스 이동
                     break;
             }
         }
@@ -412,6 +451,7 @@ namespace ToeicAudioHelper
 
         private void TxtQuestion_LostFocus(object sender, RoutedEventArgs e)
         {
+            _questionEditMode = false; // 포커스 잃을 때 편집 모드 해제
             if (int.TryParse(TxtQuestion.Text, out var q))
             {
                 TxtQuestion.Text = PadQuestion(q);
@@ -422,11 +462,14 @@ namespace ToeicAudioHelper
         {
             if (e.Key == Key.Enter)
             {
+                _questionEditMode = false; // 엔터키로 편집 모드 해제
                 if (int.TryParse(TxtQuestion.Text, out var q))
                 {
                     TxtQuestion.Text = PadQuestion(q);
                 }
                 e.Handled = true;
+                // Window로 포커스 이동하여 전역 키보드 단축키 활성화
+                this.Focus();
             }
         }
 
@@ -467,6 +510,7 @@ namespace ToeicAudioHelper
             if (_isFullTestMode)
             {
                 // Full Test 모드: Test 번호 1 증가
+                _questionEditMode = false;
                 var currentIndex = CmbTest.SelectedIndex;
                 if (currentIndex < CmbTest.Items.Count - 1)
                 {
@@ -475,8 +519,11 @@ namespace ToeicAudioHelper
             }
             else
             {
-                // Question 모드: 문항 번호 1 증가
+                // Question 모드: 문항 번호 1 증가 후 편집 모드 활성화
                 BtnQUp_Click(this, new RoutedEventArgs());
+                _questionEditMode = true;
+                TxtQuestion.Focus();
+                TxtQuestion.SelectAll(); // 전체 선택하여 다음 입력 시 교체되도록
             }
         }
 
@@ -485,6 +532,7 @@ namespace ToeicAudioHelper
             if (_isFullTestMode)
             {
                 // Full Test 모드: Test 번호 1 감소
+                _questionEditMode = false;
                 var currentIndex = CmbTest.SelectedIndex;
                 if (currentIndex > 0)
                 {
@@ -493,8 +541,11 @@ namespace ToeicAudioHelper
             }
             else
             {
-                // Question 모드: 문항 번호 1 감소
+                // Question 모드: 문항 번호 1 감소 후 편집 모드 활성화
                 BtnQDown_Click(this, new RoutedEventArgs());
+                _questionEditMode = true;
+                TxtQuestion.Focus();
+                TxtQuestion.SelectAll(); // 전체 선택하여 다음 입력 시 교체되도록
             }
         }
 
@@ -509,6 +560,33 @@ namespace ToeicAudioHelper
             {
                 // Question 모드: LOAD Question
                 BtnPlayPart_Click(this, new RoutedEventArgs());
+            }
+        }
+
+        private void HandleNumberInput(Key key)
+        {
+            // 키에서 숫자 추출
+            int digit = key switch
+            {
+                Key.D0 or Key.NumPad0 => 0,
+                Key.D1 or Key.NumPad1 => 1,
+                Key.D2 or Key.NumPad2 => 2,
+                Key.D3 or Key.NumPad3 => 3,
+                Key.D4 or Key.NumPad4 => 4,
+                Key.D5 or Key.NumPad5 => 5,
+                Key.D6 or Key.NumPad6 => 6,
+                Key.D7 or Key.NumPad7 => 7,
+                Key.D8 or Key.NumPad8 => 8,
+                Key.D9 or Key.NumPad9 => 9,
+                _ => -1
+            };
+
+            if (digit >= 0)
+            {
+                // 기존 텍스트를 숫자로 교체
+                TxtQuestion.Text = digit.ToString();
+                TxtQuestion.SelectionStart = 1; // 커서를 끝으로
+                _questionEditMode = false; // 편집 모드 해제
             }
         }
 
