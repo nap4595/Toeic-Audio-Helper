@@ -126,7 +126,8 @@
                         <ToggleButton x:Name="TglRepeat" DockPanel.Dock="Left" ToolTip="Repeat" Checked="TglRepeat_Checked" Unchecked="TglRepeat_Unchecked" Style="{StaticResource StrongRepeatToggle}" Margin="0,0,12,0">R</ToggleButton>
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                             <Button x:Name="BtnPlayVocaLc" Click="BtnPlayVocaLc_Click">VOCA LC</Button>
-                            <Button x:Name="BtnPlayVocaRc" Click="BtnPlayVocaRc_Click">VOCA RC</Button>
+                            <Button x:Name="BtnPlayVocaRc" Click="BtnPlayVocaRc_Click" Margin="0,0,12,0">VOCA RC</Button>
+                            <ToggleButton x:Name="TglMode" ToolTip="Toggle between Full Test and Question mode" Checked="TglMode_Checked" Unchecked="TglMode_Unchecked" Style="{StaticResource StrongRepeatToggle}">Full Test</ToggleButton>
                         </StackPanel>
                     </DockPanel>
                     <TextBlock x:Name="TxtStatus" Margin="0,8,0,0" Foreground="{DynamicResource Brush.Muted}"/>

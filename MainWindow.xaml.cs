@@ -31,6 +31,7 @@ namespace ToeicAudioHelper
         private bool _repeatEnabled = false;
         private string _themeName = "dark"; // default
         private bool _isPlaying = false;
+        private bool _isFullTestMode = true; // true: Full Test mode, false: Question mode
 
         public MainWindow()
         {
@@ -79,6 +80,22 @@ namespace ToeicAudioHelper
                 case Key.Right:
                     e.Handled = true;
                     BtnSeekForward_Click(this, new RoutedEventArgs());
+                    break;
+                case Key.Tab:
+                    e.Handled = true;
+                    ToggleMode();
+                    break;
+                case Key.Up:
+                    e.Handled = true;
+                    HandleUpArrow();
+                    break;
+                case Key.Down:
+                    e.Handled = true;
+                    HandleDownArrow();
+                    break;
+                case Key.Enter:
+                    e.Handled = true;
+                    HandleEnterKey();
                     break;
             }
         }
@@ -426,6 +443,73 @@ namespace ToeicAudioHelper
         private void TglRepeat_Unchecked(object sender, RoutedEventArgs e)
         {
             _repeatEnabled = false;
+        }
+
+        private void TglMode_Checked(object sender, RoutedEventArgs e)
+        {
+            _isFullTestMode = true;
+            TglMode.Content = "Full Test";
+        }
+
+        private void TglMode_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _isFullTestMode = false;
+            TglMode.Content = "Question";
+        }
+
+        private void ToggleMode()
+        {
+            TglMode.IsChecked = !TglMode.IsChecked;
+        }
+
+        private void HandleUpArrow()
+        {
+            if (_isFullTestMode)
+            {
+                // Full Test 모드: Test 번호 1 증가
+                var currentIndex = CmbTest.SelectedIndex;
+                if (currentIndex < CmbTest.Items.Count - 1)
+                {
+                    CmbTest.SelectedIndex = currentIndex + 1;
+                }
+            }
+            else
+            {
+                // Question 모드: 문항 번호 1 증가
+                BtnQUp_Click(this, new RoutedEventArgs());
+            }
+        }
+
+        private void HandleDownArrow()
+        {
+            if (_isFullTestMode)
+            {
+                // Full Test 모드: Test 번호 1 감소
+                var currentIndex = CmbTest.SelectedIndex;
+                if (currentIndex > 0)
+                {
+                    CmbTest.SelectedIndex = currentIndex - 1;
+                }
+            }
+            else
+            {
+                // Question 모드: 문항 번호 1 감소
+                BtnQDown_Click(this, new RoutedEventArgs());
+            }
+        }
+
+        private void HandleEnterKey()
+        {
+            if (_isFullTestMode)
+            {
+                // Full Test 모드: LOAD Full Test
+                BtnPlayAll_Click(this, new RoutedEventArgs());
+            }
+            else
+            {
+                // Question 모드: LOAD Question
+                BtnPlayPart_Click(this, new RoutedEventArgs());
+            }
         }
 
         private static string FormatTime(TimeSpan ts)
