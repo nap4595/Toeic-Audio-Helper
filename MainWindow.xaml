@@ -88,7 +88,7 @@
                         <ComboBoxItem Content="01"/><ComboBoxItem Content="02"/><ComboBoxItem Content="03"/><ComboBoxItem Content="04"/><ComboBoxItem Content="05"/>
                         <ComboBoxItem Content="06"/><ComboBoxItem Content="07"/><ComboBoxItem Content="08"/><ComboBoxItem Content="09"/><ComboBoxItem Content="10"/>
                     </ComboBox>
-                    <Button Grid.Column="2" x:Name="BtnPlayAll" Click="BtnPlayAll_Click" Margin="8,0,0,0">Play All</Button>
+                    <Button Grid.Column="2" x:Name="BtnPlayAll" Click="BtnPlayAll_Click" Margin="8,0,0,0">LOAD</Button>
                     <TextBlock Grid.Column="3" VerticalAlignment="Center" Margin="8,0,6,0" Text="Question"/>
                     <Grid Grid.Column="4" Width="120">
                         <Grid.ColumnDefinitions>
@@ -101,7 +101,7 @@
                             <RepeatButton x:Name="BtnQDown" Click="BtnQDown_Click" Width="24" Height="16" Padding="0" Margin="4,4,0,0" Delay="300" Interval="80"  Style="{StaticResource IconGlyphRepeatButton}">&#xE70D;</RepeatButton>
                         </StackPanel>
                     </Grid>
-                    <Button Grid.Column="5" x:Name="BtnPlayPart" Click="BtnPlayPart_Click" Margin="8,0,0,0">Play Part</Button>
+                    <Button Grid.Column="5" x:Name="BtnPlayPart" Click="BtnPlayPart_Click" Margin="8,0,0,0">LOAD</Button>
                 </Grid>
 
                 <StackPanel Grid.Row="2" Orientation="Vertical">
@@ -123,7 +123,7 @@
                         <Button x:Name="BtnSeekForward" Click="BtnSeekForward_Click" ToolTip="5s Forward" Style="{StaticResource IconGlyphButton}" Margin="6,0,6,0">&#xE893;</Button>
                     </StackPanel>
                     <DockPanel Margin="0,8,0,0">
-                        <ToggleButton x:Name="TglRepeat" DockPanel.Dock="Left" ToolTip="Repeat" Checked="TglRepeat_Checked" Unchecked="TglRepeat_Unchecked" Style="{StaticResource StrongRepeatToggle}">R</ToggleButton>
+                        <ToggleButton x:Name="TglRepeat" DockPanel.Dock="Left" ToolTip="Repeat" Checked="TglRepeat_Checked" Unchecked="TglRepeat_Unchecked" Style="{StaticResource StrongRepeatToggle}" Margin="0,0,12,0">R</ToggleButton>
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                             <Button x:Name="BtnPlayVocaLc" Click="BtnPlayVocaLc_Click">VOCA LC</Button>
                             <Button x:Name="BtnPlayVocaRc" Click="BtnPlayVocaRc_Click">VOCA RC</Button>
